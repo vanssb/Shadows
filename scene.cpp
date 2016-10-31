@@ -5,8 +5,7 @@
 
 Scene::Scene(QWidget *parent) :
     QOpenGLWidget(parent){
-    Loader::loadModel(QString(QCoreApplication::applicationDirPath()+"/Models/sphere.obj"), &vertices,&textureCord, &normals);
-    texture = new QOpenGLTexture( QImage( QCoreApplication::applicationDirPath()+"/Textures/Earth.jpg" ).mirrored() );
+
     hRot = 0.0f;
     connect( &timer, SIGNAL( timeout() ), this, SLOT(update()));
     timer.setInterval(0);
@@ -36,24 +35,24 @@ void Scene::initializeGL(){
             return;
         }
     //Привязка атрибутов
-        vertexAttr = program.attributeLocation( "vertexAttr" );
-        textureAttr = program.attributeLocation("textureAttr");
-        normalAttr = program.attributeLocation("normalAttr");
+        vertexAttr = program.attributeLocation( "vertexPos" );
+        textureAttr = program.attributeLocation( "vertexUV" );
+        normalAttr = program.attributeLocation( "vertexNorm" );
 
-        textureUniform = program.uniformLocation("textureUniform");
-        cameraPosUniform = program.uniformLocation("cameraPos");
+        textureUniform = program.uniformLocation( "textureUniform" );
+        cameraPosUniform = program.uniformLocation( "cameraPos" );
 
-        directionUniform = program.uniformLocation( "directionalLight.direction");
-        directionColorUniform = program.uniformLocation("directionalLight.color");
-        directionAmbientUniform = program.uniformLocation("directionalLight.ambientIntensity");
-        directionDiffuseUniform = program.uniformLocation("directionalLight.diffuseIntensity");
-        directionSpecularUniform = program.uniformLocation("directionalLight.specularIntensity");
+        directionUniform = program.uniformLocation( "directionalLight.direction" );
+        directionColorUniform = program.uniformLocation( "directionalLight.color" );
+        directionAmbientUniform = program.uniformLocation( "directionalLight.ambientIntensity" );
+        directionDiffuseUniform = program.uniformLocation( "directionalLight.diffuseIntensity" );
+        directionSpecularUniform = program.uniformLocation( "directionalLight.specularIntensity" );
 
-        materialSpecularFactorUniform = program.uniformLocation( "materialSpecularFactor");
-        materialEmissionUniform = program.uniformLocation( "materialEmission");
+        materialSpecularFactorUniform = program.uniformLocation( "materialSpecularFactor" );
+        materialEmissionUniform = program.uniformLocation( "materialEmission" );
 
         mvpUniform = program.uniformLocation( "MVP" );
-        mUniform = program.uniformLocation("M");
+        mUniform = program.uniformLocation( "M" );
 
 
     //Начальные настройки OpenGL
@@ -67,6 +66,8 @@ void Scene::initializeGL(){
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable( GL_ALPHA_TEST );
         glEnable(GL_MULTISAMPLE);
+        Loader::loadModel(QString(QCoreApplication::applicationDirPath()+"/Models/Earth.obj"), &vertices,&textureCord, &normals);
+        texture = new QOpenGLTexture( QImage( QCoreApplication::applicationDirPath()+"/Textures/Earth.jpg" ).mirrored() );
 }
 
 void Scene::paintGL(){
@@ -79,7 +80,9 @@ void Scene::paintGL(){
 
     mMatrix.setToIdentity();
     mMatrix.translate( 0.0f, 0.0f, -2.0f );
+    mMatrix.rotate(-25.0f, 1.0f, 0.0f ,0.0f);
     mMatrix.rotate( hRot, 0.0f, 1.0f, 0.0f );
+    mMatrix.scale(1.5f);
 
     vMatrix.setToIdentity();
     vMatrix.lookAt( QVector3D( 0.0f , 5.0f, 5.0f), QVector3D( 0.0f, 0.0f, -2.0f ), QVector3D( 0, 1, 0 ) );
@@ -92,9 +95,9 @@ void Scene::paintGL(){
     vec.normalize();
     program.setUniformValue( directionUniform, vec );
     program.setUniformValue( directionColorUniform, QVector3D( 1.0f, 1.0f, 1.0f ) );
-    program.setUniformValue( directionAmbientUniform, 0.05f );
-    program.setUniformValue( directionDiffuseUniform, 0.5f );
-    program.setUniformValue( directionSpecularUniform, 0.1f );
+    program.setUniformValue( directionAmbientUniform, 0.07f );
+    program.setUniformValue( directionDiffuseUniform, 1.4f );
+    program.setUniformValue( directionSpecularUniform, 0.5f );
 
     program.setUniformValue( materialSpecularFactorUniform, 1.0f );
     program.setUniformValue( materialEmissionUniform, 0.0f, 0.0f, 0.0f );
@@ -117,7 +120,7 @@ void Scene::paintGL(){
     program.disableAttributeArray( normalAttr );
     texture->release();
     program.release();
-    hRot = hRot >= 360.0f ? 0.0f : hRot+=0.3f;
+    hRot = hRot > 360.0f ? 0.0f : hRot+=0.3f;
 }
 
 void Scene::resizeGL(int w, int h){
