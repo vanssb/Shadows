@@ -44,6 +44,8 @@ public:
     explicit Scene(QWidget *parent=0);
     ~Scene();
     Camera camera;
+public slots:
+
 };
 
 #endif // SCENE_H

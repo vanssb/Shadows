@@ -71,7 +71,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event){
     }
     if ( newPosY > oldPosY ){
         ui->scene->camera.rotateDown();
-    }else if ( newPosY < oldPosY ){
+    }else if( newPosY < oldPosY ){
         ui->scene->camera.rotateUp();
     }
 //Возврат курсора если он заблокирован

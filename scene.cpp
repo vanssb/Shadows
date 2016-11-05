@@ -5,7 +5,7 @@
 
 Scene::Scene(QWidget *parent) :
     QOpenGLWidget(parent){
-    camera.setPosition( QVector3D( 0.0f, 0.0f, -3.0f ) );
+    camera.setPosition( QVector3D( 0.0f, 0.0f, -2.0f ) );
     hRot = 0.0f;
     connect( &timer, SIGNAL( timeout() ), this, SLOT(update()));
     timer.setInterval(0);
@@ -65,10 +65,11 @@ void Scene::initializeGL(){
         glEnable( GL_ALPHA_TEST );
         glEnable(GL_MULTISAMPLE);
         Loader::loadModel(QString(QCoreApplication::applicationDirPath()+"/Models/Earth.obj"), &vertices,&textureCord, &normals);
-        texture = new QOpenGLTexture( QImage( QCoreApplication::applicationDirPath()+"/Textures/Earth.jpg" ).mirrored() );
-        pointLightPos.setX( 0.0f );
-        pointLightPos.setY( 0.0f );
-        pointLightPos.setZ( -0.2f );
+        QImage image(QCoreApplication::applicationDirPath()+"/Textures/Earth.jpg" );
+        texture = new QOpenGLTexture( image.mirrored() );
+        pointLightPos.setX( 2.0f );
+        pointLightPos.setY( 2.0f );
+        pointLightPos.setZ( -5.0f );
         //pointLightPos.normalize();
 }
 
@@ -81,7 +82,7 @@ void Scene::paintGL(){
     texture->bind();
 
     mMatrix.setToIdentity();
-    mMatrix.translate(0.0f, 0.0f, 0.0f);
+    //mMatrix.translate(0.0f, 0.0f, 0.0f);
     mMatrix.rotate( hRot, 0.0f, 1.0f, 0.0f );
     mMatrix.scale( 1.5f );
 
@@ -92,10 +93,10 @@ void Scene::paintGL(){
     program.setUniformValue( pointUniform, pointLightPos );
     program.setUniformValue( pointColorUniform, QVector3D( 1.0f, 1.0f, 1.0f ) );
     program.setUniformValue( pointAmbientUniform, 0.1f );
-    program.setUniformValue( pointDiffuseUniform, 70.0f );
-    program.setUniformValue( pointSpecularUniform, 1.0f );
+    program.setUniformValue( pointDiffuseUniform, 20.0f );
+    program.setUniformValue( pointSpecularUniform, 0.7f );
 
-    program.setUniformValue( materialSpecularFactorUniform, 2.0f );
+    program.setUniformValue( materialSpecularFactorUniform, 1.0f );
     program.setUniformValue( materialEmissionUniform, 0.0f, 0.0f, 0.0f );
 
     program.setUniformValue( textureUniform, 0 );
@@ -122,7 +123,7 @@ void Scene::paintGL(){
 void Scene::resizeGL(int w, int h){
     //Матрица проекции, использует: угол обзора, соотношение сторон и ближнюю и дальнюю стенки проекции
         float aspect = float(w) / float(h ? h : 1);
-        const float zNear = 0.1f, zFar = 500.0f, fov = 60.0;
+        const float zNear = 0.1f, zFar = 50.0f, fov = 60.0;
         pMatrix.setToIdentity();
         pMatrix.perspective(fov, aspect, zNear, zFar);
 }

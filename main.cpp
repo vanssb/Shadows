@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     QSurfaceFormat format;
     format.setDepthBufferSize(24);
     QSurfaceFormat::setDefaultFormat(format);
-    w.setWindowFlags(Qt::WindowStaysOnTopHint);
+    //w.setWindowFlags(Qt::WindowStaysOnTopHint);
     //w.setWindowState(Qt::WindowNoState);
     w.setFocusPolicy(Qt::StrongFocus);
     w.show();

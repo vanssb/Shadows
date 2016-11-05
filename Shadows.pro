@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Shadows
 TEMPLATE = app
 
+LIBS += -lOpenGL32
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     scene.cpp \
