@@ -11,15 +11,18 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Shadows
 TEMPLATE = app
 
-LIBS  += -lOpengl32
 SOURCES += main.cpp\
         mainwindow.cpp \
     scene.cpp \
-    loader.cpp
+    loader.cpp \
+    object.cpp \
+    camera.cpp
 
 HEADERS  += mainwindow.h \
     scene.h \
-    loader.h
+    loader.h \
+    object.h \
+    camera.h
 
 FORMS    += mainwindow.ui
 

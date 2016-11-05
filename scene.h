@@ -7,7 +7,7 @@
 #include <QMatrix4x4>
 #include <vector>
 #include <QTimer>
-
+#include <camera.h>
 
 class Scene : public QOpenGLWidget
 {
@@ -24,15 +24,14 @@ private:
     int normalAttr;
     int textureUniform;
     int cameraPosUniform;
-    int directionUniform;
-    int directionColorUniform;
-    int directionAmbientUniform;
-    int directionDiffuseUniform;
-    int directionSpecularUniform;
+    int pointUniform;
+    int pointColorUniform;
+    int pointAmbientUniform;
+    int pointDiffuseUniform;
+    int pointSpecularUniform;
     int materialSpecularFactorUniform;
     int materialEmissionUniform;
     QMatrix4x4 mMatrix;
-    QMatrix4x4 vMatrix;
     QMatrix4x4 pMatrix;
     std::vector<float> vertices;
     std::vector<float> textureCord;
@@ -40,10 +39,11 @@ private:
     QOpenGLTexture* texture;
     QTimer timer;
     float hRot;
-    void setupLight();
+    QVector3D pointLightPos;
 public:
     explicit Scene(QWidget *parent=0);
     ~Scene();
+    Camera camera;
 };
 
 #endif // SCENE_H

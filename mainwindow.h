@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QKeyEvent>
+#include <QMouseEvent>
 
 namespace Ui {
 class MainWindow;
@@ -16,6 +18,10 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    int oldPosX, oldPosY, newPosX, newPosY;
+public slots:
+    void keyPressEvent(QKeyEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
 };
 
 #endif // MAINWINDOW_H
